@@ -36,7 +36,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (CarRentalContext context = new CarRentalContext())
             {
-                return
+                return context.Set<Car>().Where(filter).SingleOrDefault();
             }
         }
 
@@ -50,7 +50,6 @@ namespace DataAccess.Concrete.EntityFramework
                     : context.Set<Car>().Where(filter).ToList();
                 
             }
-
         }   
 
         public void Update(Car entity)
