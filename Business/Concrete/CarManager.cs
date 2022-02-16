@@ -8,8 +8,8 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _carDal;
-        // dataaccess katmanına yazdın ya ekleme kodlarını
-        // şimdi onu business ta kullanacaz ekleyebilmek için
+        
+
         public CarManager(ICarDal carDal)
         {
             _carDal = carDal;
@@ -36,6 +36,7 @@ namespace Business.Concrete
         public List<Car> GetCarsByBrandId(int brandId)
         {
             return _carDal.GetAll(p => p.BrandId == brandId);
+
         }
 
         public List<Car> GetCarsByColorId(int colorId)

@@ -30,7 +30,7 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (CarRentalContext context = new CarRentalContext())
             {
-                return context.Set<Brand>().Where(filter).FirstOrDefault();
+                return context.Brands.Where(filter).FirstOrDefault();
                 
             }
         }
