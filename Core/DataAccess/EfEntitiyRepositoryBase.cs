@@ -24,7 +24,7 @@ namespace Core.DataAccess
             }
         }
 
-        public void Delete(Color entity)
+        public void Delete(TEntity entity)
         {
             using (TContext context = new TContext())
             {
@@ -43,15 +43,17 @@ namespace Core.DataAccess
             }
         }
 
-        public List<Color> GetAll(Expression<Func<Color, bool>> filter = null)
+        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
         {
-            using(TContext context = new TContext)
+            using(TContext context = new TContext())
             {
-
+                return filter == null ?
+                    context.Set<TEntity>().ToList()
+                    : context.Set<TEntity>().Where(filter).ToList();
             }
         }
 
-        public void Update(Color entity)
+        public void Update(TEntity entity)
         {
             using (TContext context = new TContext())
             {
