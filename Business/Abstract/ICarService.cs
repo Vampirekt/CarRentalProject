@@ -13,6 +13,6 @@ namespace Business.Abstract
 
         List<Car> GetCarsByColorId(int colorId);
 
-        // temelde araba getirceğimizden araba managera yazılır o kodlar buraya yani
+        
     }
 }
