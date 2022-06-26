@@ -1,6 +1,9 @@
 ﻿using Business.Abstract;
+using Core.Utilities;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System.Collections.Generic;
 
 namespace Business.Concrete
@@ -15,33 +18,41 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public void Add(Car car)
-        {
-            if (car.Description.Length >= 2
-                && car.DailyPrice>0
-                ) { _carDal.Add(car); }
-            else
+        public IResult Add(Car car)
+        { if (car.Description.Length <= 2
+                || car.DailyPrice <= 0)
             {
-                System.Console.WriteLine("Arabanın adı min 2 harf olabilir");
-                    
+                System.Console.WriteLine("Mininmum description length is 2 & minimum car price" +
+                  "is 1");
+                return new ErrorResult("Unsuccessful");
             }
+            else _carDal.Add(car);
+            return new SuccessResult("Successful");
 
         }
 
-        public List<Car> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return _carDal.GetAll();
+
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(),true);
         }
 
-        public List<Car> GetCarsByBrandId(int brandId)
+        public IDataResult<List<CarDetailDTO>> GetCarDetails()
         {
-            return _carDal.GetAll(p => p.BrandId == brandId);
+            return new SuccessDataResult<List<CarDetailDTO>>(_carDal.GetCarDetails(), true);
+        }
+
+        public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p=>p.BrandId==brandId), true);
+
 
         }
 
-        public List<Car> GetCarsByColorId(int colorId)
+        public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
-            return _carDal.GetAll(p => p.ColorId == colorId);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p=>p.ColorId==colorId), true);
+
         }
     }
 }
