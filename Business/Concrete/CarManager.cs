@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Core.Utilities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -27,7 +28,7 @@ namespace Business.Concrete
                 return new ErrorResult("Unsuccessful");
             }
             else _carDal.Add(car);
-            return new SuccessResult("Successful");
+            return new SuccessResult(Messages.CarAdded);
 
         }
 
