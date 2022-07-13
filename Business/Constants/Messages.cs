@@ -6,7 +6,7 @@ namespace Business.Constants
 {
    public class Messages
     {
-        public string CarAdded = ("Success");
+        public static string CarAdded = ("Success");
     }
 }
 

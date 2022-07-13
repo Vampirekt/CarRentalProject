@@ -7,12 +7,12 @@ using System.Text;
 
 namespace Business.Abstract
 {
-    public interface IBrandService
+   public interface IUserService
+
     {
-        IResult Add(Brand brand);
+        IResult Add(User user);
         IDataResult<List<Brand>> GetAll();
         IResult Delete(Brand brand);
         IResult Update(Brand brand);
-
     }
 }

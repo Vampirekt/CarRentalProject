@@ -10,7 +10,7 @@ namespace Core.Utilities.Results
         {
 
         }
-        public ErrorResult() : base(true)
+        public ErrorResult() : base(false)
         {
 
         }

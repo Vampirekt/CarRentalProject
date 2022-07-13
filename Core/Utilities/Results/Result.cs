@@ -11,14 +11,14 @@ namespace Core.Utilities
         public string Message { get; }
 
 
-        public Result(bool sucsess, string message)
+        public Result(bool success, string message)
         {
-            Success = sucsess;
+            Success = success;
             Message = message;
         }
-        public Result(bool sucsess)
+        public Result(bool success)
         {
-            Success = sucsess;
+            Success = success; 
             
         }
     }

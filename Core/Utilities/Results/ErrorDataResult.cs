@@ -7,17 +7,26 @@ namespace Core.Utilities.Results
     public class ErrorDataResult<T>:DataResult<T>
 
     {
-        public ErrorDataResult(T data,bool success,string message)
+        public ErrorDataResult(T data,string message)
             :base(data,false,message)
         {
-            Data = data;
+            
         }
-        public ErrorDataResult(T data, bool success)
+        public ErrorDataResult(T data)
             : base(data, false)
         {
-            Data = data;
+            
+        }
+        public ErrorDataResult(string message)
+            : base(default,false,message)
+        {
+
         }
 
-        public T Data { get; }
+        public ErrorDataResult():base(default,false)
+        {
+
+        }
+
     }
 }
