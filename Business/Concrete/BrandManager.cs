@@ -22,9 +22,22 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        public IResult Delete(Brand brand)
+        {
+            _BrandDal.Delete(brand); 
+            return new SuccessResult();
+                
+        }
+
         public IDataResult<List<Brand>> GetAll()
         {
-            return new SuccessDataResult<List<Brand>>(_BrandDal.GetAll(), true);
+            return new SuccessDataResult<List<Brand>>(_BrandDal.GetAll());
+        }
+
+        public IResult Update(Brand brand)
+        {
+            _BrandDal.Update(brand);
+            return new SuccessResult();
         }
     }
 }

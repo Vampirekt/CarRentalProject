@@ -15,7 +15,7 @@ namespace Core.DataAccess
         public void Add(TEntity entity)
         {
             using (TContext context = new TContext())
-            {
+            {   
                 var AddedEntity = context.Entry(entity);
                 AddedEntity.State = EntityState.Added;
                 context.SaveChanges();

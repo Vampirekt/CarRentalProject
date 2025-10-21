@@ -19,20 +19,20 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        public IResult Delete(Brand brand)
+        public IResult Delete(Customer customer)
         {
             throw new NotImplementedException();
         }
 
-        public IDataResult<List<Brand>> GetAll()
+        public IDataResult<List<Customer>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public IResult Update(Brand brand)
+        public IResult Update(Customer customer)
         {
             throw new NotImplementedException();
         }
     }
 }
-}
+

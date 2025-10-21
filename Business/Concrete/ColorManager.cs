@@ -31,9 +31,22 @@ namespace Business.Concrete
             
         }
 
+        public IResult Delete(Color color)
+        {
+            _ColorDal.Delete(color);
+            return new SuccessResult();
+        }
+
         public IDataResult<List<Color>> GetAll()
         {
-            return new SuccessDataResult<List<Color>>(_ColorDal.GetAll(),true);
+            return new SuccessDataResult<List<Color>>(_ColorDal.GetAll());
         }
+
+        public IResult Update(Color color)
+        {
+            _ColorDal.Update(color);
+            return new SuccessResult();
+        }
+
     }
 }
