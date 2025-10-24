@@ -10,7 +10,7 @@ namespace Business.Abstract
     {
         IDataResult<List<Car>> GetAll();
 
-        IResult Add(Car car);
+        IDataResult<CarDetailDTO> Add(CreateCarDTO car);
 
         IDataResult<List<Car>> GetCarsByBrandId(int brandId);
 

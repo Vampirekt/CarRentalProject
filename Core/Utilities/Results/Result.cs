@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Core.Utilities
+﻿namespace Core.Utilities
 {
     public class Result : IResult
     {
@@ -18,8 +14,8 @@ namespace Core.Utilities
         }
         public Result(bool success)
         {
-            Success = success; 
-            
+            Success = success;
+
         }
     }
 }

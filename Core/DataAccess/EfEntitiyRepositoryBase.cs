@@ -4,22 +4,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Core.DataAccess
 {
-    public class EfEntityRepositoryBase<TEntity,TContext>
-        where TEntity:class,IEntity,new()
-        where TContext:DbContext,new()
+    public class EfEntityRepositoryBase<TEntity, TContext>
+        where TEntity : class, IEntity, new()
+        where TContext : DbContext, new()
     {
         public void Add(TEntity entity)
         {
             using (TContext context = new TContext())
-            {   
+            {
                 var AddedEntity = context.Entry(entity);
                 AddedEntity.State = EntityState.Added;
                 context.SaveChanges();
-                
+
             }
         }
 
@@ -36,7 +35,7 @@ namespace Core.DataAccess
 
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
         {
-            using(TContext context = new TContext())
+            using (TContext context = new TContext())
             {
                 return context.Set<TEntity>().Where(filter).SingleOrDefault();
             }
@@ -44,7 +43,7 @@ namespace Core.DataAccess
 
         public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
         {
-            using(TContext context = new TContext())
+            using (TContext context = new TContext())
             {
                 return filter == null ?
                     context.Set<TEntity>().ToList()
