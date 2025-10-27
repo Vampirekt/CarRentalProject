@@ -17,16 +17,31 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public List<Car> Get()
+        public IActionResult GetAll()
         {
-
             var result = _carService.GetAll();
-            return result.Data;
+
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            return Ok(result.Data);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var result = _carService.Get(c => c.Id == id);
+
+            if (!result.Success || result.Data == null)
+                return NotFound(result.Message ?? "Car not found.");
+
+            return Ok(result.Data);
         }
 
         [HttpPost]
         public IActionResult Add([FromBody] CreateCarDTO carDTO)
         {
+             
 
             var result = _carService.Add(carDTO);
             if (!result.Success)

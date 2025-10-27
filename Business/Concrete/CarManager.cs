@@ -5,7 +5,12 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Linq.Expressions;
+using Color = Entities.Concrete.Color;
 
 namespace Business.Concrete
 {
@@ -51,34 +56,79 @@ namespace Business.Concrete
 
         }
 
-        public IResult Delete(Car car)
+        public IResult Delete(int id)
         {
+            var car = _carDal.Get(c => c.Id == id);
+            if (car == null)
+                return new ErrorResult("Car not found");
+
             _carDal.Delete(car);
-            return new SuccessResult();
+
+            
+            return new SuccessResult("Car deleted successfully");
         }
 
-        public IDataResult<List<Car>> GetAll()
+        public IDataResult<CarDetailDTO> Get(Expression<Func<Car, bool>> predicate)
         {
+            var carEntity = _carDal.Get(predicate);
+            if (carEntity == null)
+                return new ErrorDataResult<CarDetailDTO>("Car not found");
 
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll());
+            var color = _colorService.Get(c => c.Id == carEntity.ColorId).Data;
+            if (color == null)
+                return new ErrorDataResult<CarDetailDTO>("Color not found");
+
+            var brand = _brandService.Get(b => b.Id == carEntity.BrandId).Data;
+            if (brand == null)
+                return new ErrorDataResult<CarDetailDTO>("Brand not found");
+
+            var carDetailDTO = new CarDetailDTO
+            {
+                CarId = carEntity.Id,
+                BrandName = brand.Name,
+                ColorName = color.Name,
+                DailyPrice = carEntity.DailyPrice,
+            };
+
+            return new SuccessDataResult<CarDetailDTO>(carDetailDTO, "Car retrieved successfully");
         }
 
-        public IDataResult<List<CarDetailDTO>> GetCarDetails()
+
+        public IDataResult<List<CarDetailDTO>> GetAll(Expression<Func<Car, bool>> predicate = null)
         {
-            return new SuccessDataResult<List<CarDetailDTO>>(_carDal.GetCarDetails());
+            var carEntities = _carDal.GetAll(predicate);
+            if (carEntities == null || !carEntities.Any())
+                return new ErrorDataResult<List<CarDetailDTO>>("No cars found");
+
+            var carDetailList = new List<CarDetailDTO>();
+
+            foreach (var car in carEntities)
+            {
+                var color = _colorService.Get(c => c.Id == car.ColorId).Data;
+                var brand = _brandService.Get(b => b.Id == car.BrandId).Data;
+
+                if (color == null || brand == null)
+                    continue;
+
+                carDetailList.Add(new CarDetailDTO
+                {
+                    CarId = car.Id,
+                    BrandName = brand.Name,
+                    ColorName = color.Name,
+                    DailyPrice = car.DailyPrice
+                });
+            }
+
+            if (!carDetailList.Any())
+                return new ErrorDataResult<List<CarDetailDTO>>("No car details could be retrieved");
+
+            return new SuccessDataResult<List<CarDetailDTO>>(carDetailList, "Cars retrieved successfully");
         }
 
-        public IDataResult<List<Car>> GetCarsByBrandId(int brandId)
+
+        public IDataResult<CarDetailDTO> Update(int id, UpdateCarDTO carDto)
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.BrandId == brandId));
-
-
-        }
-
-        public IDataResult<List<Car>> GetCarsByColorId(int colorId)
-        {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(p => p.ColorId == colorId));
-
+            throw new NotImplementedException();
         }
     }
 }
