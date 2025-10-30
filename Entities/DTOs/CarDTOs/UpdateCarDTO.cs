@@ -1,8 +1,13 @@
 ﻿using Core.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Entities.DTOs
+namespace Entities.DTOs.CarDTOs
 {
-    public class CreateCarDTO:IDto
+    public class UpdateCarDTO : IDto
     {
         public int BrandId { get; set; }
         public int ColorId { get; set; }
@@ -10,4 +15,5 @@ namespace Entities.DTOs
         public decimal DailyPrice { get; set; }
         public string Description { get; set; }
     }
+
 }

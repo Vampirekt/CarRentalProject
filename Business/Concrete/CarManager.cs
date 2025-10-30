@@ -1,10 +1,12 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using Entities.DTOs;
+using Entities.DTOs.CarDTOs;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -30,17 +32,11 @@ namespace Business.Concrete
 
         public IDataResult<CarDetailDTO> Add(CreateCarDTO car)
         {
-            if (car.Description.Length <= 2
-                || car.DailyPrice <= 0)
-            {
+            ValidationTool.Validate(new CreateCarValidator(), car);
 
-                return new ErrorDataResult<CarDetailDTO>("Mininmum description length is 2 & minimum car price" +
-                  "is 1");
-            }
             Color color = _colorService.Get(p => p.Id == car.ColorId).Data;
-            if (color == null) return new ErrorDataResult<CarDetailDTO>("Color not found");
             Brand brand = _brandService.Get(p => p.Id == car.BrandId).Data;
-            if (brand == null) return new ErrorDataResult<CarDetailDTO>("Brand not found");
+
 
             Car carEntity = new Car
             {
@@ -48,7 +44,8 @@ namespace Business.Concrete
                 BrandId = car.BrandId,
                 DailyPrice = car.DailyPrice,
                 Description = car.Description,
-                ModelYear = car.ModelYear
+                ModelYear = car.ModelYear,
+                
             };
             _carDal.Add(carEntity);
             CarDetailDTO carDetailDTO = new CarDetailDTO { BrandName = brand.Name, CarId = carEntity.Id, ColorName = color.Name, DailyPrice = carEntity.DailyPrice };
@@ -64,7 +61,7 @@ namespace Business.Concrete
 
             _carDal.Delete(car);
 
-            
+
             return new SuccessResult("Car deleted successfully");
         }
 
@@ -88,6 +85,7 @@ namespace Business.Concrete
                 BrandName = brand.Name,
                 ColorName = color.Name,
                 DailyPrice = carEntity.DailyPrice,
+                Description = carEntity.Description,
             };
 
             return new SuccessDataResult<CarDetailDTO>(carDetailDTO, "Car retrieved successfully");
@@ -115,7 +113,8 @@ namespace Business.Concrete
                     CarId = car.Id,
                     BrandName = brand.Name,
                     ColorName = color.Name,
-                    DailyPrice = car.DailyPrice
+                    DailyPrice = car.DailyPrice,
+                    Description = car.Description
                 });
             }
 
@@ -128,7 +127,41 @@ namespace Business.Concrete
 
         public IDataResult<CarDetailDTO> Update(int id, UpdateCarDTO carDto)
         {
-            throw new NotImplementedException();
-        }
-    }
-}
+            if (carDto == null)
+            {
+                throw new ArgumentNullException(nameof(carDto), "carDto cannot be null");
+            }
+
+            ValidationTool.Validate(new UpdateCarValidator(), carDto);
+
+            var existingCar = _carDal.Get(c => c.Id == id);
+            if (existingCar == null)
+                return new ErrorDataResult<CarDetailDTO>("Car not found.");
+
+            var colorResult = _colorService.Get(p => p.Id == carDto.ColorId);
+            if (!colorResult.Success || colorResult.Data == null)
+                return new ErrorDataResult<CarDetailDTO>("Invalid Color Id.");
+
+            var brandResult = _brandService.Get(p => p.Id == carDto.BrandId);
+            if (!brandResult.Success || brandResult.Data == null)
+                return new ErrorDataResult<CarDetailDTO>("Invalid Brand Id.");
+
+            existingCar.BrandId = carDto.BrandId;
+            existingCar.ColorId = carDto.ColorId;
+            existingCar.DailyPrice = carDto.DailyPrice;
+            existingCar.Description = carDto.Description;
+            existingCar.ModelYear = carDto.ModelYear;
+
+            _carDal.Update(existingCar);
+
+            var carDetailDTO = new CarDetailDTO
+            {
+                CarId = existingCar.Id,
+                BrandName = brandResult.Data.Name,
+                ColorName = colorResult.Data.Name,
+                DailyPrice = existingCar.DailyPrice,
+                Description = existingCar.Description,
+
+            };
+            return new SuccessDataResult<CarDetailDTO>(carDetailDTO,"Success");
+} } }

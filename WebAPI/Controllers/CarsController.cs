@@ -1,6 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
-using Entities.DTOs;
+using Entities.DTOs.CarDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -44,6 +44,19 @@ namespace WebAPI.Controllers
              
 
             var result = _carService.Add(carDTO);
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Data);
+
+        }
+        [HttpPut]
+        public IActionResult Update([FromBody] UpdateCarDTO carDTO, int id)
+        {
+
+
+            var result = _carService.Update(id,carDTO);
             if (!result.Success)
             {
                 return BadRequest(result.Message);

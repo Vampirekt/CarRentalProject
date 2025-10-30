@@ -1,5 +1,5 @@
 ﻿using Entities.Concrete;
-using Entities.DTOs;
+using Entities.DTOs.CarDTOs;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -9,21 +9,21 @@ using System.Threading.Tasks;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    public class CarValidator:AbstractValidator<CarDetailDTO>
+    public class CreateCarValidator:AbstractValidator<CreateCarDTO>
     {
-        public CarValidator()
+        public CreateCarValidator()
         {
             RuleFor(x => x.BrandId)
             .NotEmpty().WithMessage("Brand is required.");
 
-            RuleFor(x => x.Model)
-                .NotEmpty().WithMessage("Model is required.");
+            RuleFor(x => x.ColorId)
+                .NotEmpty().WithMessage("Color is required.");
 
-            RuleFor(x => x.Year)
-                .InclusiveBetween(1990, DateTime.Now.Year)
+            RuleFor(x => x.ModelYear)
+                .InclusiveBetween((short)1990, (short)DateTime.Now.Year)
                 .WithMessage("Year must be between 1990 and the current year.");
 
-            RuleFor(x => x.Price)
+            RuleFor(x => x.DailyPrice)
                 .GreaterThan(0)
                 .WithMessage("Price must be greater than zero.");
         }
