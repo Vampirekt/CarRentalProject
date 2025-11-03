@@ -3,6 +3,7 @@ using Core.Utilities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs.ColorDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -12,22 +13,26 @@ namespace Business.Concrete
     public class ColorManager : IColorService
 
     {
-        IColorDal _ColorDal;
+        private readonly IColorDal _ColorDal;
+
+        
 
         public ColorManager(IColorDal ColorDal)
 
         {
+            
             _ColorDal = ColorDal;
         }
 
-        public IResult Add(Color color)
+        public IDataResult<ColorDetailDTO> Add(CreateColorDTO color)
         {
-            if (color.Name.Length <= 2)
+           
+            Color color1 = new Color
             {
-                return new ErrorResult();
-            }
-            else _ColorDal.Add(color);
-            return new SuccessResult();
+                Name = color.Name
+            };
+            _ColorDal.Add(color1);
+            return new SuccessDataResult<ColorDetailDTO>();
 
         }
 

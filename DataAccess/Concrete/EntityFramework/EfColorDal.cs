@@ -4,6 +4,9 @@ using Entities.Concrete;
 using Entities.DTOs.CarDTOs;
 using Entities.DTOs.ColorDTOs;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+
 
 namespace DataAccess.Concrete.EntityFramework
 {
